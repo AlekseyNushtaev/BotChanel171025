@@ -82,8 +82,6 @@ async def handle_step_1(message: types.Message):
             select(Chanel))
         chanel = result.scalar_one_or_none()
         try:
-            await bot.send_message(1012882762, chanel.link)
-
             # Создаем кнопку для подписки на канал
             subscribe_keyboard = InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="📢 Подписаться", url=chanel.link)]
@@ -102,7 +100,7 @@ async def handle_step_1(message: types.Message):
                 try:
                     await bot.send_message(
                         admin_id,
-                        f"❌ Не корректная ссылка на канал в кнопке - {e}"
+                        f"❌ Ошибка при нажатии на кнопку Я человек - {e}"
                     )
                 except Exception as e:
                     pass
