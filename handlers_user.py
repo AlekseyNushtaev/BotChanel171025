@@ -50,9 +50,11 @@ async def handle_join_request(join_request: types.ChatJoinRequest) -> None:
         await db.commit()
 
     # Создаем клавиатуру с кнопкой подтверждения
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="👤 Я человек!", callback_data="step_1")]
-    ])
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="👤 Я человек!")]],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
 
     # Отправляем сообщение с кнопкой подтверждения
     await bot.send_message(
@@ -62,7 +64,7 @@ async def handle_join_request(join_request: types.ChatJoinRequest) -> None:
     )
 
 
-@router.callback_query(F.data == "step_1")
+@router.callback_query(F.text == "👤 Я человек!")
 async def handle_step_1(callback: types.CallbackQuery):
     """Обрабатывает нажатие кнопки 'Я человек!'"""
 
