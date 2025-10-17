@@ -64,8 +64,8 @@ async def handle_join_request(join_request: types.ChatJoinRequest) -> None:
     )
 
 
-@router.callback_query(F.text == "👤 Я человек!")
-async def handle_step_1(callback: types.CallbackQuery):
+@router.message(F.text == "👤 Я человек!")
+async def handle_step_1(message: types.Message):
     """Обрабатывает нажатие кнопки 'Я человек!'"""
 
     async with Session() as db:
@@ -91,13 +91,11 @@ async def handle_step_1(callback: types.CallbackQuery):
 
             # Отправляем сообщение с просьбой подписаться
             await bot.send_message(
-                chat_id=callback.from_user.id,
+                chat_id=message.from_user.id,
                 text="📢 Пожалуйста, подпишитесь на этот канал!",
                 reply_markup=subscribe_keyboard
             )
 
-            # Отвечаем на callback, чтобы убрать "часики" на кнопке
-            await callback.answer()
         except Exception as e:
             print(e)
             for admin_id in ADMIN_IDS:
@@ -112,7 +110,7 @@ async def handle_step_1(callback: types.CallbackQuery):
         # Ждем 60 секунд и отправляем сообщение с благодарностью
         await asyncio.sleep(60)
         await bot.send_message(
-            chat_id=callback.from_user.id,
+            chat_id=message.from_user.id,
             text="🙏 Спасибо за вашу заявку на подписку! Модераторы рассмотрят её в ближайшее время! ⏰"
         )
 
